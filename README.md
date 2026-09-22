@@ -1,59 +1,56 @@
-# MovieExplorer
+﻿# Movie Explorer
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.24.
+Movie Explorer is a focused Angular learning project. It uses local mock movie data to demonstrate modern Angular fundamentals without requiring a backend, database, authentication, or third-party API key.
 
-## Development server
+## What It Demonstrates
 
-To start a local development server, run:
+- Standalone components
+- Component templates and styling
+- Parent-to-child inputs
+- Child-to-parent outputs
+- Angular Router
+- Route parameters
+- Services and Dependency Injection
+- Signals and computed state
+- Reactive Forms
+- localStorage persistence
+- Modern `@if` and `@for` control flow
+- Configurable Home page content blocks
 
-```bash
-ng serve
-```
+## Routes
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- `/` - Home page with configurable content blocks
+- `/movies` - Search, filter, sort, and paginate movies
+- `/movies/:id` - Movie detail page using a route parameter
+- `/favorites` - Persisted favorite movies
+- `/settings` - Display configuration toggles
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## Run Locally
 
 ```bash
-ng build
+npm install
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Then open:
 
-## Running unit tests
+```text
+http://localhost:4200/
+```
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Useful Commands
 
 ```bash
-ng test
+npm run build
+npm test -- --watch=false
 ```
 
-## Running end-to-end tests
+## Data Source
 
-For end-to-end (e2e) testing, run:
+The app uses mock data from `src/app/data/movies.ts`.
 
-```bash
-ng e2e
-```
+A small local JSON file exists at `public/movies-api-sample.json` to show where an `HttpClient` data source could be introduced later without requiring external credentials.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Learning Notes
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+See `ANGULAR_LEARNING_NOTES.md` for the phase-by-phase explanation of the Angular concepts used in this project.
