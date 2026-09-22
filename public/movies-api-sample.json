@@ -1,0 +1,13 @@
+﻿[
+  {
+    "id": 101,
+    "title": "Example API Movie",
+    "year": 2026,
+    "genre": "Science Fiction",
+    "rating": 7.5,
+    "description": "A local JSON example that demonstrates where HttpClient can read movie data later.",
+    "posterUrl": "https://placehold.co/640x420/0f172a/f8fafc?text=API+Example",
+    "director": "Local JSON",
+    "duration": "100 min"
+  }
+]
