@@ -11,13 +11,17 @@ import { MovieService } from '../../services/movie.service';
   styleUrl: './favorites-page.css'
 })
 export class FavoritesPageComponent {
-  private readonly movieService = inject(MovieService);
+  protected readonly movieService = inject(MovieService);
   protected readonly favoritesService = inject(FavoritesService);
 
   protected readonly favoriteMovies = computed(() => {
     const favoriteIds = this.favoritesService.favoriteIds();
     return this.movieService.getMovies().filter((movie) => favoriteIds.includes(movie.id));
   });
+
+  constructor() {
+    this.movieService.loadMovies();
+  }
 
   toggleFavorite(movieId: number): void {
     this.favoritesService.toggleFavorite(movieId);

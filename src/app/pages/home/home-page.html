@@ -1,4 +1,6 @@
 ﻿<div class="home-page">
+  <p class="source-label">Movie source: {{ movieService.sourceLabel() }}</p>
+
   <!-- ANGULAR LEARNING: Conditional Rendering with @if for configurable blocks. -->
   @if (displayConfigService.displayConfig().hero) {
     <app-hero />
@@ -7,8 +9,10 @@
   @if (displayConfigService.displayConfig().featuredMovies) {
     <app-movie-grid
       title="Featured Movies"
-      [movies]="featuredMovies"
+      [movies]="featuredMovies()"
       [favoriteIds]="favoritesService.favoriteIds()"
+      [isLoading]="movieService.loading()"
+      [errorMessage]="movieService.errorMessage()"
       (favoriteToggled)="toggleFavorite($event)"
     />
   }
@@ -16,8 +20,10 @@
   @if (displayConfigService.displayConfig().topRatedMovies) {
     <app-movie-grid
       title="Top Rated Movies"
-      [movies]="topRatedMovies"
+      [movies]="topRatedMovies()"
       [favoriteIds]="favoritesService.favoriteIds()"
+      [isLoading]="movieService.loading()"
+      [errorMessage]="movieService.errorMessage()"
       (favoriteToggled)="toggleFavorite($event)"
     />
   }
@@ -25,8 +31,10 @@
   @if (displayConfigService.displayConfig().recommendations) {
     <app-movie-grid
       title="Recently Added / Recommended"
-      [movies]="recommendedMovies"
+      [movies]="recommendedMovies()"
       [favoriteIds]="favoritesService.favoriteIds()"
+      [isLoading]="movieService.loading()"
+      [errorMessage]="movieService.errorMessage()"
       (favoriteToggled)="toggleFavorite($event)"
     />
   }

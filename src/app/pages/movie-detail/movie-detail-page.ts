@@ -1,5 +1,5 @@
-﻿import { Component, inject } from '@angular/core';
-import { RouterLink, ActivatedRoute } from '@angular/router';
+﻿import { Component, computed, inject } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FavoritesService } from '../../services/favorites.service';
 import { MovieService } from '../../services/movie.service';
 
@@ -11,16 +11,22 @@ import { MovieService } from '../../services/movie.service';
 })
 export class MovieDetailPageComponent {
   private readonly route = inject(ActivatedRoute);
-  private readonly movieService = inject(MovieService);
+  protected readonly movieService = inject(MovieService);
   protected readonly favoritesService = inject(FavoritesService);
 
   // ANGULAR LEARNING: Route parameters identify which movie to load.
   protected readonly movieId = Number(this.route.snapshot.paramMap.get('id'));
-  protected readonly movie = this.movieService.getMovieById(this.movieId);
+  protected readonly movie = computed(() => this.movieService.getMovieById(this.movieId));
+
+  constructor() {
+    this.movieService.loadMovies();
+  }
 
   toggleFavorite(): void {
-    if (this.movie) {
-      this.favoritesService.toggleFavorite(this.movie.id);
+    const currentMovie = this.movie();
+
+    if (currentMovie) {
+      this.favoritesService.toggleFavorite(currentMovie.id);
     }
   }
 

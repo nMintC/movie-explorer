@@ -5,8 +5,14 @@
     </div>
   }
 
-  <!-- ANGULAR LEARNING: @if empty state -->
-  @if (movies().length > 0) {
+  @if (errorMessage()) {
+    <p class="state-message warning" aria-live="polite">{{ errorMessage() }}</p>
+  }
+
+  <!-- ANGULAR LEARNING: Loading state for async data. -->
+  @if (isLoading()) {
+    <p class="state-message loading" aria-live="polite">Loading movies...</p>
+  } @else if (movies().length > 0) {
     <div class="movie-grid">
       <!-- ANGULAR LEARNING: Parent passes one movie to each child with property binding. -->
       @for (movie of movies(); track movie.id) {

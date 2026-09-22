@@ -1,42 +1,51 @@
-﻿@if (movie) {
+﻿@if (movieService.loading()) {
+  <section class="not-found" aria-live="polite">
+    <h1>Loading movie...</h1>
+    <p>Checking the configured movie data source.</p>
+  </section>
+} @else if (movie(); as currentMovie) {
   <article class="detail-layout">
-    <img class="detail-poster" [src]="movie.posterUrl" [alt]="movie.title + ' poster'" (error)="useFallbackPoster($event)" />
+    <img class="detail-poster" [src]="currentMovie.posterUrl" [alt]="currentMovie.title + ' poster'" (error)="useFallbackPoster($event)" />
 
     <div class="detail-content">
       <a routerLink="/movies" class="back-link">Back to movies</a>
-      <p class="eyebrow">{{ movie.genre }}</p>
-      <h1>{{ movie.title }}</h1>
+      <p class="source-label">Movie source: {{ movieService.sourceLabel() }}</p>
+      @if (movieService.errorMessage()) {
+        <p class="warning" aria-live="polite">{{ movieService.errorMessage() }}</p>
+      }
+      <p class="eyebrow">{{ currentMovie.genre }}</p>
+      <h1>{{ currentMovie.title }}</h1>
 
       <dl class="facts">
         <div>
           <dt>Year</dt>
-          <dd>{{ movie.year }}</dd>
+          <dd>{{ currentMovie.year }}</dd>
         </div>
         <div>
           <dt>Rating</dt>
-          <dd>{{ movie.rating }}/10</dd>
+          <dd>{{ currentMovie.rating }}/10</dd>
         </div>
         <div>
           <dt>Director</dt>
-          <dd>{{ movie.director }}</dd>
+          <dd>{{ currentMovie.director }}</dd>
         </div>
         <div>
           <dt>Duration</dt>
-          <dd>{{ movie.duration }}</dd>
+          <dd>{{ currentMovie.duration }}</dd>
         </div>
       </dl>
 
-      <p class="description">{{ movie.description }}</p>
+      <p class="description">{{ currentMovie.description }}</p>
 
-      <button type="button" class="favorite-button" [class.saved]="favoritesService.isFavorite(movie.id)" (click)="toggleFavorite()">
-        {{ favoritesService.isFavorite(movie.id) ? 'Remove from favorites' : 'Add to favorites' }}
+      <button type="button" class="favorite-button" [class.saved]="favoritesService.isFavorite(currentMovie.id)" (click)="toggleFavorite()">
+        {{ favoritesService.isFavorite(currentMovie.id) ? 'Remove from favorites' : 'Add to favorites' }}
       </button>
     </div>
   </article>
 } @else {
   <section class="not-found" aria-live="polite">
     <h1>Movie not found.</h1>
-    <p>The movie ID in the URL does not match the local movie data.</p>
+    <p>The movie ID in the URL does not match the active movie data.</p>
     <a routerLink="/movies">Browse movies</a>
   </section>
 }

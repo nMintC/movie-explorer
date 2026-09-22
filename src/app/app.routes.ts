@@ -1,15 +1,32 @@
 ﻿import { Routes } from '@angular/router';
-import { FavoritesPageComponent } from './pages/favorites/favorites-page';
-import { HomePageComponent } from './pages/home/home-page';
-import { MovieDetailPageComponent } from './pages/movie-detail/movie-detail-page';
-import { MoviesPageComponent } from './pages/movies/movies-page';
-import { SettingsPageComponent } from './pages/settings/settings-page';
+import { validMovieIdGuard } from './guards/valid-movie-id.guard';
 
 export const routes: Routes = [
-  { path: '', component: HomePageComponent, title: 'Movie Explorer - Home' },
-  { path: 'movies', component: MoviesPageComponent, title: 'Movie Explorer - Movies' },
-  { path: 'movies/:id', component: MovieDetailPageComponent, title: 'Movie Explorer - Movie Detail' },
-  { path: 'favorites', component: FavoritesPageComponent, title: 'Movie Explorer - Favorites' },
-  { path: 'settings', component: SettingsPageComponent, title: 'Movie Explorer - Settings' },
+  {
+    path: '',
+    title: 'Movie Explorer - Home',
+    loadComponent: () => import('./pages/home/home-page').then((m) => m.HomePageComponent),
+  },
+  {
+    path: 'movies',
+    title: 'Movie Explorer - Movies',
+    loadComponent: () => import('./pages/movies/movies-page').then((m) => m.MoviesPageComponent),
+  },
+  {
+    path: 'movies/:id',
+    title: 'Movie Explorer - Movie Detail',
+    canActivate: [validMovieIdGuard],
+    loadComponent: () => import('./pages/movie-detail/movie-detail-page').then((m) => m.MovieDetailPageComponent),
+  },
+  {
+    path: 'favorites',
+    title: 'Movie Explorer - Favorites',
+    loadComponent: () => import('./pages/favorites/favorites-page').then((m) => m.FavoritesPageComponent),
+  },
+  {
+    path: 'settings',
+    title: 'Movie Explorer - Settings',
+    loadComponent: () => import('./pages/settings/settings-page').then((m) => m.SettingsPageComponent),
+  },
   { path: '**', redirectTo: '' },
 ];

@@ -3,12 +3,15 @@
     <p class="eyebrow">Saved list</p>
     <h1>Favorites</h1>
     <p>Your favorites persist after refresh through localStorage.</p>
+    <p class="source-label">Movie source: {{ movieService.sourceLabel() }}</p>
   </header>
 
-  @if (favoriteMovies().length > 0) {
+  @if (favoriteMovies().length > 0 || movieService.loading() || movieService.errorMessage()) {
     <app-movie-grid
       [movies]="favoriteMovies()"
       [favoriteIds]="favoritesService.favoriteIds()"
+      [isLoading]="movieService.loading()"
+      [errorMessage]="movieService.errorMessage()"
       (favoriteToggled)="toggleFavorite($event)"
     />
   } @else {

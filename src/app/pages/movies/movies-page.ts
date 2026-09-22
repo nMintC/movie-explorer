@@ -13,7 +13,7 @@ const PAGE_SIZE = 10;
   styleUrl: './movies-page.css'
 })
 export class MoviesPageComponent {
-  private readonly movieService = inject(MovieService);
+  protected readonly movieService = inject(MovieService);
   protected readonly favoritesService = inject(FavoritesService);
 
   // ANGULAR LEARNING: Signal state for user-controlled UI state.
@@ -33,6 +33,10 @@ export class MoviesPageComponent {
     const startIndex = (this.currentPage() - 1) * this.pageSize;
     return this.filteredMovies().slice(startIndex, startIndex + this.pageSize);
   });
+
+  constructor() {
+    this.movieService.loadMovies();
+  }
 
   updateFilters(filters: SearchFilters): void {
     this.filters.set(filters);

@@ -2,3 +2,15 @@
   display: grid;
   gap: 34px;
 }
+
+.source-label {
+  justify-self: start;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 6px;
+  color: #cbd5e1;
+  background: rgba(15, 23, 42, 0.72);
+  font-size: 0.9rem;
+  font-weight: 800;
+}

@@ -13,6 +13,8 @@ export class MovieGridComponent {
   readonly movies = input.required<Movie[]>();
   readonly favoriteIds = input<number[]>([]);
   readonly emptyMessage = input('No movies found.');
+  readonly isLoading = input(false);
+  readonly errorMessage = input<string | null>(null);
   readonly favoriteToggled = output<number>();
 
   isFavorite(movieId: number): boolean {
