@@ -1,2 +1,21 @@
-﻿<h1>Favorites</h1>
-<p>Favorite movies will appear here.</p>
+﻿<div class="favorites-page">
+  <header class="page-header">
+    <p class="eyebrow">Saved list</p>
+    <h1>Favorites</h1>
+    <p>Your favorites persist after refresh through localStorage.</p>
+  </header>
+
+  @if (favoriteMovies().length > 0) {
+    <app-movie-grid
+      [movies]="favoriteMovies()"
+      [favoriteIds]="favoritesService.favoriteIds()"
+      (favoriteToggled)="toggleFavorite($event)"
+    />
+  } @else {
+    <section class="empty-state" aria-live="polite">
+      <h2>No favorites yet.</h2>
+      <p>Save movies from the movie cards or detail page and they will appear here.</p>
+      <a routerLink="/movies">Browse movies</a>
+    </section>
+  }
+</div>
