@@ -1,2 +1,33 @@
-﻿<h1>Home</h1>
-<p>Movie discovery sections will appear here.</p>
+﻿<div class="home-page">
+  <!-- ANGULAR LEARNING: Conditional Rendering with @if for configurable blocks. -->
+  @if (displayConfigService.displayConfig().hero) {
+    <app-hero />
+  }
+
+  @if (displayConfigService.displayConfig().featuredMovies) {
+    <app-movie-grid
+      title="Featured Movies"
+      [movies]="featuredMovies"
+      [favoriteIds]="favoritesService.favoriteIds()"
+      (favoriteToggled)="toggleFavorite($event)"
+    />
+  }
+
+  @if (displayConfigService.displayConfig().topRatedMovies) {
+    <app-movie-grid
+      title="Top Rated Movies"
+      [movies]="topRatedMovies"
+      [favoriteIds]="favoritesService.favoriteIds()"
+      (favoriteToggled)="toggleFavorite($event)"
+    />
+  }
+
+  @if (displayConfigService.displayConfig().recommendations) {
+    <app-movie-grid
+      title="Recently Added / Recommended"
+      [movies]="recommendedMovies"
+      [favoriteIds]="favoritesService.favoriteIds()"
+      (favoriteToggled)="toggleFavorite($event)"
+    />
+  }
+</div>
