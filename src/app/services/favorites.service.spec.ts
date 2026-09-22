@@ -12,12 +12,12 @@ describe('FavoritesService', () => {
 
     service.toggleFavorite(3);
 
-    expect(service.isFavorite(3)).toBeTrue();
+    expect(service.isFavorite(3)).toBe(true);
     expect(service.favoriteCount()).toBe(1);
 
     service.toggleFavorite(3);
 
-    expect(service.isFavorite(3)).toBeFalse();
+    expect(service.isFavorite(3)).toBe(false);
     expect(service.favoriteCount()).toBe(0);
   });
 
@@ -29,3 +29,4 @@ describe('FavoritesService', () => {
     expect(service.favoriteIds()).toEqual([2, 5]);
   });
 });
+

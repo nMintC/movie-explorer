@@ -27,7 +27,8 @@ describe('MovieService', () => {
     const results = service.searchMovies({ searchText: '', genre: 'Animation', sort: 'newest' });
 
     expect(results.length).toBeGreaterThan(1);
-    expect(results.every((movie) => movie.genre === 'Animation')).toBeTrue();
+    expect(results.every((movie) => movie.genre === 'Animation')).toBe(true);
     expect(results[0].year).toBeGreaterThanOrEqual(results[1].year);
   });
 });
+

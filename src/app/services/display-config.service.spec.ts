@@ -12,7 +12,7 @@ describe('DisplayConfigService', () => {
 
     service.updateSetting('hero', false);
 
-    expect(service.displayConfig().hero).toBeFalse();
+    expect(service.displayConfig().hero).toBe(false);
     expect(localStorage.getItem('movie-explorer-display-config')).toContain('"hero":false');
   });
 
@@ -22,6 +22,7 @@ describe('DisplayConfigService', () => {
     service.updateSetting('recommendations', false);
     service.resetToDefaults();
 
-    expect(service.displayConfig().recommendations).toBeTrue();
+    expect(service.displayConfig().recommendations).toBe(true);
   });
 });
+
