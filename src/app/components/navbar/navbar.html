@@ -1,0 +1,11 @@
+﻿<nav class="navbar" aria-label="Main navigation">
+  <!-- ANGULAR LEARNING: Router navigation -->
+  <a class="brand" routerLink="/" aria-label="Movie Explorer home">Movie Explorer</a>
+
+  <div class="nav-links">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/movies" routerLinkActive="active">Movies</a>
+    <a routerLink="/favorites" routerLinkActive="active">Favorites ({{ favoritesService.favoriteCount() }})</a>
+    <a routerLink="/settings" routerLinkActive="active">Settings</a>
+  </div>
+</nav>
