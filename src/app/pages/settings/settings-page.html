@@ -1,2 +1,18 @@
-﻿<h1>Settings</h1>
-<p>Display settings will appear here.</p>
+﻿<div class="settings-page">
+  <header class="page-header">
+    <p class="eyebrow">Configurable blocks</p>
+    <h1>Settings</h1>
+    <p>Choose which Home page content blocks Angular should actually render.</p>
+  </header>
+
+  <app-display-settings
+    [config]="displayConfigService.displayConfig()"
+    (settingChanged)="updateDisplaySetting($event)"
+    (resetRequested)="resetDisplaySettings()"
+  />
+
+  <section class="learning-note">
+    <h2>What this demonstrates</h2>
+    <p>The Home page uses <code>@if</code> with this saved configuration, so hidden sections are not rendered in the DOM.</p>
+  </section>
+</div>
