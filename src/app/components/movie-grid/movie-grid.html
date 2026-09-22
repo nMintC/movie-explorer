@@ -1,0 +1,23 @@
+﻿<section class="movie-section">
+  @if (title()) {
+    <div class="section-heading">
+      <h2>{{ title() }}</h2>
+    </div>
+  }
+
+  <!-- ANGULAR LEARNING: @if empty state -->
+  @if (movies().length > 0) {
+    <div class="movie-grid">
+      <!-- ANGULAR LEARNING: Parent passes one movie to each child with property binding. -->
+      @for (movie of movies(); track movie.id) {
+        <app-movie-card
+          [movie]="movie"
+          [isFavorite]="isFavorite(movie.id)"
+          (favoriteToggled)="favoriteToggled.emit($event)"
+        />
+      }
+    </div>
+  } @else {
+    <p class="empty-state">{{ emptyMessage() }}</p>
+  }
+</section>

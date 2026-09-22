@@ -1,0 +1,27 @@
+﻿<article class="movie-card">
+  <a class="poster-link" [routerLink]="['/movies', movie().id]" [attr.aria-label]="'View details for ' + movie().title">
+    <!-- ANGULAR LEARNING: Property Binding -->
+    <img class="poster" [src]="movie().posterUrl" [alt]="movie().title + ' poster'" (error)="useFallbackPoster($event)" />
+  </a>
+
+  <div class="movie-info">
+    <!-- ANGULAR LEARNING: Interpolation -->
+    <h3>{{ movie().title }}</h3>
+    <p class="meta">{{ movie().year }} | {{ movie().genre }}</p>
+    <p class="rating" aria-label="Rating {{ movie().rating }} out of 10">Star {{ movie().rating }}/10</p>
+    <p class="description">{{ movie().description }}</p>
+
+    <div class="card-actions">
+      <a class="details-link" [routerLink]="['/movies', movie().id]">View details</a>
+      <button
+        type="button"
+        class="favorite-button"
+        [class.saved]="isFavorite()"
+        (click)="toggleFavorite($event)"
+        [attr.aria-label]="isFavorite() ? 'Remove ' + movie().title + ' from favorites' : 'Add ' + movie().title + ' to favorites'"
+      >
+        {{ isFavorite() ? 'Saved' : 'Save' }}
+      </button>
+    </div>
+  </div>
+</article>

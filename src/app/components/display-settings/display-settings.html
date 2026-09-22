@@ -1,0 +1,25 @@
+﻿<section class="settings-panel" aria-labelledby="display-settings-title">
+  <h2 id="display-settings-title">Display Settings</h2>
+
+  <label>
+    <input type="checkbox" [checked]="config().hero" (change)="updateSetting('hero', $event)" />
+    <span>Hero Section</span>
+  </label>
+
+  <label>
+    <input type="checkbox" [checked]="config().featuredMovies" (change)="updateSetting('featuredMovies', $event)" />
+    <span>Featured Movies</span>
+  </label>
+
+  <label>
+    <input type="checkbox" [checked]="config().topRatedMovies" (change)="updateSetting('topRatedMovies', $event)" />
+    <span>Top Rated Movies</span>
+  </label>
+
+  <label>
+    <input type="checkbox" [checked]="config().recommendations" (change)="updateSetting('recommendations', $event)" />
+    <span>Recommendations</span>
+  </label>
+
+  <button type="button" (click)="resetRequested.emit()">Reset to defaults</button>
+</section>

@@ -1,0 +1,28 @@
+﻿<form class="filters" [formGroup]="filtersForm" aria-label="Movie filters">
+  <label>
+    <span>Search by title</span>
+    <input type="search" formControlName="searchText" placeholder="Try Inception" />
+  </label>
+
+  <label>
+    <span>Genre</span>
+    <select formControlName="genre">
+      @for (genre of genres; track genre) {
+        <option [value]="genre">{{ genre }}</option>
+      }
+    </select>
+  </label>
+
+  <label>
+    <span>Sort</span>
+    <select formControlName="sort">
+      <option value="rating-desc">Rating: High to Low</option>
+      <option value="newest">Newest</option>
+      <option value="oldest">Oldest</option>
+      <option value="title-az">Title A-Z</option>
+    </select>
+  </label>
+
+  <!-- ANGULAR LEARNING: Event Binding -->
+  <button type="button" (click)="clearSearch()">Clear</button>
+</form>
