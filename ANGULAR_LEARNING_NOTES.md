@@ -473,3 +473,184 @@ Important logic is covered in:
 - `src/app/services/display-config.service.spec.ts`: display settings and reset
 - `src/app/pages/movies/movies-page.spec.ts`: pagination and filter reset
 - `src/app/app.spec.ts`: shell rendering
+
+# Phase 8 - API-Ready HttpClient Architecture
+
+## Configured Movie Data Sources
+
+The app still works from local mock data by default, but `MovieService` now has a clear place for alternative movie sources.
+
+Inspect:
+
+- `src/app/services/movie.service.ts`
+- `src/environments/environment.ts`
+- `src/environments/environment.prod.ts`
+- `public/movies-api-sample.json`
+
+Example:
+
+```ts
+export const environment = {
+  movieApi: {
+    dataSource: 'mock',
+    staticMoviesUrl: '/movies-api-sample.json',
+    tmdbBaseUrl: 'https://api.themoviedb.org/3',
+    tmdbApiKey: '',
+  },
+};
+```
+
+Data flow:
+
+```text
+environment.movieApi.dataSource
+|
+MovieService.loadMovies()
+|
+mock data, static JSON, or optional TMDB path
+|
+if remote fails, local MOVIES fallback is used
+```
+
+The default source is `mock`, so no API key or backend server is required.
+
+## Safe Fallback
+
+Remote loading errors do not break the app.
+
+Inspect: `src/app/services/movie.service.ts`
+
+Example:
+
+```ts
+catchError(() => {
+  this.errorMessageState.set('Could not load remote movies. Showing local fallback data.');
+  this.sourceLabelState.set('Local fallback data');
+  return of(MOVIES);
+})
+```
+
+# Phase 9 - Loading And Error State
+
+## Async UI State
+
+`MovieService` exposes signals for loading, error, and active source label.
+
+Inspect: `src/app/services/movie.service.ts`
+
+Example:
+
+```ts
+readonly loading = this.loadingState.asReadonly();
+readonly errorMessage = this.errorMessageState.asReadonly();
+readonly sourceLabel = this.sourceLabelState.asReadonly();
+```
+
+The pages read these signals and show beginner-friendly status messages.
+
+Inspect:
+
+- `src/app/pages/movies/movies-page.html`
+- `src/app/pages/home/home-page.html`
+- `src/app/pages/movie-detail/movie-detail-page.html`
+- `src/app/components/movie-grid/movie-grid.html`
+
+Example:
+
+```html
+@if (isLoading()) {
+  <p class="state-message loading" aria-live="polite">Loading movies...</p>
+}
+```
+
+# Phase 10 - Lazy-Loaded Routes And Guards
+
+## Lazy-Loaded Routes
+
+Routes now use `loadComponent`, so each page can be loaded as its own route chunk.
+
+Inspect: `src/app/app.routes.ts`
+
+Example:
+
+```ts
+{
+  path: 'movies',
+  loadComponent: () => import('./pages/movies/movies-page').then((m) => m.MoviesPageComponent),
+}
+```
+
+Build output shows separate lazy chunks for pages such as `movies-page`, `home-page`, and `movie-detail-page`.
+
+## Route Guard
+
+A route guard validates the movie detail route parameter before Angular activates the detail page.
+
+Inspect: `src/app/guards/valid-movie-id.guard.ts`
+
+Example:
+
+```ts
+export const validMovieIdGuard: CanActivateFn = (route) => {
+  const movieId = Number(route.paramMap.get('id'));
+  return Number.isInteger(movieId) && movieId > 0 ? true : inject(Router).parseUrl('/movies');
+};
+```
+
+Data flow:
+
+```text
+User opens /movies/abc
+|
+validMovieIdGuard checks id
+|
+invalid id redirects to /movies
+```
+
+A numeric but unknown id, such as `/movies/999`, still reaches the detail page and shows the existing Movie not found state.
+
+# Phase 11 - HTTP Interceptor
+
+## Shared HTTP Behavior
+
+The app uses a functional HTTP interceptor to add common behavior to outgoing HTTP requests.
+
+Inspect:
+
+- `src/app/interceptors/movie-api.interceptor.ts`
+- `src/app/app.config.ts`
+
+Example:
+
+```ts
+provideHttpClient(withInterceptors([movieApiInterceptor]))
+```
+
+The interceptor adds a learning-project header to requests and applies the configured request timeout.
+
+For future TMDB requests, it can attach the bearer token only when `tmdbApiKey` is configured. No secrets are committed.
+
+# Phase 12 - Environment And Configuration Management
+
+## Environment Files
+
+The project now has environment files for API configuration.
+
+Inspect:
+
+- `src/environments/environment.ts`
+- `src/environments/environment.prod.ts`
+- `angular.json`
+
+Production builds replace `environment.ts` with `environment.prod.ts` through `fileReplacements`.
+
+The app stays credential-free because `tmdbApiKey` is an empty string by default and `dataSource` is `mock`.
+
+## New Tests
+
+Additional tests cover the new architecture:
+
+- `src/app/app.routes.spec.ts`: lazy routes and guarded detail route
+- `src/app/guards/valid-movie-id.guard.spec.ts`: valid and invalid route parameters
+- `src/app/interceptors/movie-api.interceptor.spec.ts`: shared HTTP header
+- `src/app/services/movie.service.spec.ts`: static JSON loading and fallback behavior

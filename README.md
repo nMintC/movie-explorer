@@ -54,3 +54,20 @@ A small local JSON file exists at `public/movies-api-sample.json` to show where 
 ## Learning Notes
 
 See `ANGULAR_LEARNING_NOTES.md` for the phase-by-phase explanation of the Angular concepts used in this project.
+
+## Phase 8-12 Additions
+
+The project now also demonstrates:
+
+- API-ready movie loading with safe local fallback
+- Environment-based API configuration
+- Loading and error UI state
+- Lazy-loaded standalone routes with `loadComponent`
+- A route guard for movie detail URLs
+- A functional HTTP interceptor
+
+The default configuration uses local mock data, so the app still runs immediately after `npm install` and `npm start` without API keys or external credentials.
+
+To experiment with a local JSON-style source, change `movieApi.dataSource` in `src/environments/environment.ts` from `mock` to `static-json`.
+
+TMDB support is intentionally configuration-only until a real key is supplied. Do not commit secrets; configure `tmdbApiKey` only in a private/local environment when experimenting.
