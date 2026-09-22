@@ -1,2 +1,39 @@
-﻿<h1>Movies</h1>
-<p>Movie browsing controls will appear here.</p>
+﻿<div class="movies-page">
+  <header class="page-header">
+    <p class="eyebrow">Browse catalog</p>
+    <h1>Movies</h1>
+    <p>Search local mock data, filter by genre, sort results, and move through pages.</p>
+  </header>
+
+  <app-search-bar (filtersChanged)="updateFilters($event)" />
+
+  <div class="results-summary" aria-live="polite">
+    Showing {{ visibleMovies().length }} of {{ filteredMovies().length }} matching movies.
+  </div>
+
+  <app-movie-grid
+    [movies]="visibleMovies()"
+    [favoriteIds]="favoritesService.favoriteIds()"
+    emptyMessage="No movies found. Try a different search or filter."
+    (favoriteToggled)="toggleFavorite($event)"
+  />
+
+  @if (filteredMovies().length > pageSize) {
+    <nav class="pagination" aria-label="Movie result pages">
+      <button type="button" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1">Previous</button>
+
+      @for (page of pageNumbers(); track page) {
+        <button
+          type="button"
+          (click)="goToPage(page)"
+          [class.active]="page === currentPage()"
+          [attr.aria-current]="page === currentPage() ? 'page' : null"
+        >
+          {{ page }}
+        </button>
+      }
+
+      <button type="button" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()">Next</button>
+    </nav>
+  }
+</div>

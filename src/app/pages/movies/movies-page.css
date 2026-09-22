@@ -1,1 +1,64 @@
-﻿
+﻿.movies-page {
+  display: grid;
+  gap: 24px;
+}
+
+.page-header {
+  display: grid;
+  gap: 8px;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #2dd4bf;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+.page-header p:not(.eyebrow),
+.results-summary {
+  margin: 0;
+  color: #cbd5e1;
+}
+
+.results-summary {
+  font-weight: 800;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.pagination button {
+  min-width: 42px;
+  min-height: 40px;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  border-radius: 6px;
+  padding: 0 12px;
+  color: #e2e8f0;
+  background: #111827;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+}
+
+.pagination button.active,
+.pagination button:hover:not(:disabled),
+.pagination button:focus-visible:not(:disabled) {
+  color: #08111f;
+  background: #2dd4bf;
+  outline: none;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
