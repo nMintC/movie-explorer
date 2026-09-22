@@ -1,0 +1,55 @@
+﻿<!-- ANGULAR LEARNING: This file is the template for AppComponent. -->
+<main class="page-shell">
+  <header class="app-header">
+    <!-- ANGULAR LEARNING: Interpolation -->
+    <h1>{{ appTitle }}</h1>
+    <p>{{ subtitle }}</p>
+  </header>
+
+  <section class="search-panel" aria-label="Movie search">
+    <label for="movie-search">Search by movie title</label>
+
+    <div class="search-row">
+      <input
+        id="movie-search"
+        type="search"
+        placeholder="Try Inception"
+        [value]="searchText"
+        (input)="updateSearchText(searchInput.value)"
+        (keyup.enter)="searchMovies()"
+        #searchInput
+      />
+
+      <!-- ANGULAR LEARNING: Event Binding -->
+      <button type="button" class="primary-button" (click)="searchMovies()">
+        Search
+      </button>
+
+      <!-- ANGULAR LEARNING: Event Binding -->
+      <button type="button" class="secondary-button" (click)="clearSearch()">
+        Clear
+      </button>
+    </div>
+
+    <!-- ANGULAR LEARNING: Interpolation -->
+    <p class="search-summary">
+      Showing {{ filteredMovies.length }} of {{ movies.length }} movies.
+    </p>
+  </section>
+
+  <!-- ANGULAR LEARNING: @if -->
+  @if (filteredMovies.length > 0) {
+    <section class="movie-grid" aria-label="Movie results">
+      <!-- ANGULAR LEARNING: @for -->
+      @for (movie of filteredMovies; track movie.id) {
+        <!-- ANGULAR LEARNING: Property Binding -->
+        <app-movie-card [movie]="movie" />
+      }
+    </section>
+  } @else {
+    <section class="empty-state" aria-live="polite">
+      <h2>No movies found.</h2>
+      <p>Try another title or clear the search.</p>
+    </section>
+  }
+</main>

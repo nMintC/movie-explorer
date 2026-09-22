@@ -1,0 +1,13 @@
+﻿<!-- ANGULAR LEARNING: This file is the template for MovieCardComponent. -->
+<article class="movie-card">
+  <!-- ANGULAR LEARNING: Property Binding -->
+  <img class="poster" [src]="movie.posterUrl" [alt]="movie.title + ' poster'" />
+
+  <div class="movie-info">
+    <!-- ANGULAR LEARNING: Interpolation -->
+    <h2>{{ movie.title }}</h2>
+    <p class="meta">{{ movie.year }} &bull; {{ movie.genre }}</p>
+    <p class="rating">Rating: {{ movie.rating }}/10</p>
+    <p class="description">{{ movie.description }}</p>
+  </div>
+</article>

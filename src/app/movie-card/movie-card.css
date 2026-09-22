@@ -1,0 +1,48 @@
+﻿.movie-card {
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 8px;
+  background: #111827;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.24);
+}
+
+.poster {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  background: #1f2937;
+}
+
+.movie-info {
+  padding: 16px;
+}
+
+.movie-info h2 {
+  margin: 0 0 8px;
+  font-size: 1.15rem;
+}
+
+.meta,
+.rating,
+.description {
+  margin: 0;
+}
+
+.meta {
+  color: #93c5fd;
+  font-weight: 700;
+}
+
+.rating {
+  margin-top: 10px;
+  color: #facc15;
+  font-weight: 800;
+}
+
+.description {
+  margin-top: 10px;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
