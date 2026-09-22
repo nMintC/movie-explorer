@@ -1,150 +1,475 @@
-﻿# Phase 1 - Angular Fundamentals
+﻿# Movie Explorer - Angular Learning Notes
 
-## 1. AppComponent
+This project is organized as phased Angular learning material. Each phase below documents only concepts that are actually used in the current codebase.
 
-`AppComponent` is located at `src/app/app.ts`.
-
-It is responsible for the main Movie Explorer page: the header text, search UI, local mock movie data, filtering logic, and the list of movie cards.
-
-Its template file is `src/app/app.html`.
-
-The state it currently owns is:
-
-- `appTitle`
-- `subtitle`
-- `searchText`
-- `movies`
-- `filteredMovies`
-
-## 2. MovieCardComponent
-
-`MovieCardComponent` is located at `src/app/movie-card/movie-card.ts`.
-
-Its responsibility is to display one movie card.
-
-It receives one `movie` object from `AppComponent` through this input:
-
-```ts
-@Input({ required: true }) movie!: Movie;
-```
-
-## 3. Component Tree
+## Current Component Tree
 
 ```text
 AppComponent
-|-- MovieCardComponent
+|
+|-- NavbarComponent
+|
+`-- RouterOutlet
+    |
+    |-- HomePageComponent
+    |   |-- HeroComponent
+    |   `-- MovieGridComponent
+    |       `-- MovieCardComponent
+    |
+    |-- MoviesPageComponent
+    |   |-- SearchBarComponent
+    |   `-- MovieGridComponent
+    |       `-- MovieCardComponent
+    |
+    |-- MovieDetailPageComponent
+    |
+    |-- FavoritesPageComponent
+    |   `-- MovieGridComponent
+    |       `-- MovieCardComponent
+    |
+    `-- SettingsPageComponent
+        `-- DisplaySettingsComponent
 ```
 
-`AppComponent` is the parent component. It owns the movie list and decides which movies should be shown.
+## Major Data Flow
 
-`MovieCardComponent` is the child component. It receives one movie from the parent and displays that movie.
+Movie browsing:
 
-## 4. Data Binding
-
-### Interpolation
-
-Interpolation displays component values inside the template.
-
-Real examples from `src/app/app.html`:
-
-```html
-<h1>{{ appTitle }}</h1>
-<p>{{ subtitle }}</p>
+```text
+MovieService
+|
+MoviesPageComponent
+|
+MovieGridComponent
+|
+MovieCardComponent
 ```
 
-Real example from `src/app/movie-card/movie-card.html`:
+Configurable Home sections:
 
-```html
-<h2>{{ movie.title }}</h2>
+```text
+SettingsPageComponent
+|
+DisplayConfigService signal state
+|
+localStorage
+|
+HomePageComponent
+|
+@if
+|
+show/hide content block
 ```
 
-### Property Binding
+Favorites:
 
-Property binding sends a component value into an HTML property or a child component input.
-
-Real example from `src/app/app.html`:
-
-```html
-<app-movie-card [movie]="movie" />
+```text
+MovieCardComponent favorite button
+|
+favoriteToggled output
+|
+MovieGridComponent
+|
+Page component
+|
+FavoritesService signal state
+|
+localStorage
 ```
 
-Real examples from `src/app/movie-card/movie-card.html`:
+# Phase 1 - Angular Fundamentals
 
-```html
-<img class="poster" [src]="movie.posterUrl" [alt]="movie.title + ' poster'" />
+## Component
+
+A component is a reusable UI building block with TypeScript, HTML, and CSS.
+
+Why this project uses it: each major UI area is easier to study when it lives in a focused component.
+
+Inspect:
+
+- `src/app/app.ts`
+- `src/app/components/movie-card/movie-card.ts`
+
+Example:
+
+```ts
+@Component({
+  selector: 'app-movie-card',
+  templateUrl: './movie-card.html',
+  styleUrl: './movie-card.css'
+})
+export class MovieCardComponent {}
 ```
 
-### Event Binding
+## Template
 
-Event binding runs component methods when the user does something.
+A template is the HTML connected to a component.
 
-Real examples from `src/app/app.html`:
+Inspect: `src/app/components/movie-card/movie-card.html`
+
+Example:
 
 ```html
-(input)="updateSearchText(searchInput.value)"
-(click)="searchMovies()"
-(click)="clearSearch()"
+<h3>{{ movie().title }}</h3>
 ```
 
-## 5. Component State
+## Interpolation
 
-Component state means values stored by a component that affect what the user sees.
+Interpolation prints component values in the template.
 
-Current `AppComponent` state in `src/app/app.ts`:
+Inspect: `src/app/components/movie-card/movie-card.html`
 
-- `appTitle`: page title
-- `subtitle`: page subtitle
-- `searchText`: what the user typed into the search box
-- `movies`: the full local mock movie list
-- `filteredMovies`: the movie list currently shown on the page
-
-## 6. `@for`
-
-`@for` is used in `src/app/app.html`:
+Example:
 
 ```html
-@for (movie of filteredMovies; track movie.id) {
+<p class="meta">{{ movie().year }} | {{ movie().genre }}</p>
+```
+
+## Property Binding
+
+Property binding passes a value into an HTML property or component input.
+
+Inspect: `src/app/components/movie-card/movie-card.html`
+
+Example:
+
+```html
+<img [src]="movie().posterUrl" [alt]="movie().title + ' poster'" />
+```
+
+## Event Binding
+
+Event binding runs code when a user action happens.
+
+Inspect: `src/app/components/movie-card/movie-card.html`
+
+Example:
+
+```html
+<button type="button" (click)="toggleFavorite($event)">
+```
+
+## `@for`
+
+`@for` repeats UI for a list.
+
+Inspect: `src/app/components/movie-grid/movie-grid.html`
+
+Example:
+
+```html
+@for (movie of movies(); track movie.id) {
   <app-movie-card [movie]="movie" />
 }
 ```
 
-Angular repeats the `app-movie-card` element once for each movie in `filteredMovies`.
+Angular renders one movie card for each movie and tracks each item by `movie.id`.
 
-`track movie.id` helps Angular identify each movie by its unique `id`.
+## `@if`
 
-## 7. `@if`
+`@if` conditionally renders UI.
 
-`@if` is used in `src/app/app.html`:
+Inspect: `src/app/pages/home/home-page.html`
+
+Example:
 
 ```html
-@if (filteredMovies.length > 0) {
-  ...
-} @else {
-  <section class="empty-state" aria-live="polite">
-    <h2>No movies found.</h2>
-    <p>Try another title or clear the search.</p>
-  </section>
+@if (displayConfigService.displayConfig().hero) {
+  <app-hero />
 }
 ```
 
-It is needed because the page should show movie cards when matches exist and a friendly empty message when no matches exist.
+This is important for the mentor requirement because hidden Home sections are not rendered.
 
-## 8. Data flow
+# Phase 2 - Component Architecture
 
-```text
-User types search
-|
-AppComponent updates searchText
-|
-User clicks Search
-|
-AppComponent updates filteredMovies
-|
-template re-renders
-|
-MovieCardComponent receives movie data
-|
-UI updates
+## Parent / Child Components
+
+Parent components pass data down to child components.
+
+Inspect:
+
+- `src/app/components/movie-grid/movie-grid.html`
+- `src/app/components/movie-card/movie-card.ts`
+
+Example:
+
+```html
+<app-movie-card [movie]="movie" [isFavorite]="isFavorite(movie.id)" />
 ```
 
-This phase uses only local mock data. There is no backend, API, service, routing, signals, or storage yet.
+## Input
+
+Inputs let a child component receive data.
+
+Inspect: `src/app/components/movie-card/movie-card.ts`
+
+Example:
+
+```ts
+readonly movie = input.required<Movie>();
+readonly isFavorite = input(false);
+```
+
+## Output
+
+Outputs let a child component notify a parent about an event.
+
+Inspect: `src/app/components/movie-card/movie-card.ts`
+
+Example:
+
+```ts
+readonly favoriteToggled = output<number>();
+```
+
+Data flow:
+
+```text
+MovieCardComponent emits favoriteToggled
+|
+MovieGridComponent forwards the event
+|
+Page component calls FavoritesService
+```
+
+## Separation Of Responsibilities
+
+`AppComponent` is now lightweight.
+
+Inspect: `src/app/app.ts`
+
+Example:
+
+```ts
+export class AppComponent {}
+```
+
+Movie data and search behavior moved into `MovieService`, while pages coordinate the UI.
+
+# Phase 3 - Routing
+
+## RouterOutlet
+
+`RouterOutlet` renders the active route component.
+
+Inspect: `src/app/app.html`
+
+Example:
+
+```html
+<router-outlet />
+```
+
+## RouterLink And RouterLinkActive
+
+`RouterLink` navigates without a full page reload. `RouterLinkActive` styles the active nav item.
+
+Inspect: `src/app/components/navbar/navbar.html`
+
+Example:
+
+```html
+<a routerLink="/movies" routerLinkActive="active">Movies</a>
+```
+
+## Route Parameters
+
+Route parameters read dynamic URL values.
+
+Inspect:
+
+- `src/app/app.routes.ts`
+- `src/app/pages/movie-detail/movie-detail-page.ts`
+
+Example:
+
+```ts
+protected readonly movieId = Number(this.route.snapshot.paramMap.get('id'));
+```
+
+Data flow:
+
+```text
+/movies/3
+|
+ActivatedRoute reads id
+|
+MovieService.getMovieById(3)
+|
+MovieDetailPageComponent displays the movie
+```
+
+# Phase 4 - Services And Dependency Injection
+
+## MovieService
+
+`MovieService` centralizes movie access and filtering.
+
+Inspect: `src/app/services/movie.service.ts`
+
+Example:
+
+```ts
+getMovieById(id: number): Movie | undefined {
+  return this.movies.find((movie) => movie.id === id);
+}
+```
+
+Why data moved from `AppComponent`: the root component should be the shell, while movie behavior belongs in a dedicated service and feature pages.
+
+## Dependency Injection
+
+Dependency Injection gives components access to shared services.
+
+Inspect: `src/app/pages/movies/movies-page.ts`
+
+Example:
+
+```ts
+private readonly movieService = inject(MovieService);
+```
+
+## HttpClient Architecture
+
+The app still uses local mock data, but `MovieService` includes a local JSON example to show where API loading can fit later.
+
+Inspect:
+
+- `src/app/services/movie.service.ts`
+- `public/movies-api-sample.json`
+
+Example:
+
+```ts
+getMoviesFromStaticJson(): Observable<Movie[]> {
+  return this.http.get<Movie[]>('/movies-api-sample.json');
+}
+```
+
+No API key is required.
+
+# Phase 5 - Signals And State
+
+## signal
+
+A signal stores reactive state.
+
+Inspect: `src/app/services/favorites.service.ts`
+
+Example:
+
+```ts
+private readonly favoriteIdsState = signal<number[]>(this.readFavoriteIds());
+```
+
+## computed
+
+`computed()` derives a value from signals.
+
+Inspect: `src/app/services/favorites.service.ts`
+
+Example:
+
+```ts
+readonly favoriteCount = computed(() => this.favoriteIdsState().length);
+```
+
+Why signals are useful here: favorites and display settings can change from different pages, and the UI updates when signal values change.
+
+# Phase 6 - Persistence
+
+## localStorage
+
+`localStorage` persists small browser-side settings after refresh.
+
+Inspect:
+
+- `src/app/services/favorites.service.ts`
+- `src/app/services/display-config.service.ts`
+
+Example:
+
+```ts
+localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(ids));
+```
+
+Persistence is centralized in services so components do not directly talk to browser storage.
+
+# Phase 7 - Forms / Search / Filtering
+
+## Reactive Forms
+
+Reactive Forms group related user inputs in TypeScript.
+
+Inspect: `src/app/components/search-bar/search-bar.ts`
+
+Example:
+
+```ts
+protected readonly filtersForm = new FormGroup({
+  searchText: new FormControl('', { nonNullable: true }),
+  genre: new FormControl<MovieGenre | 'All'>('All', { nonNullable: true }),
+  sort: new FormControl<MovieSort>('rating-desc', { nonNullable: true }),
+});
+```
+
+Data flow:
+
+```text
+User changes search/filter/sort
+|
+SearchBarComponent emits filtersChanged
+|
+MoviesPageComponent updates filter signal and resets page
+|
+computed filteredMovies recalculates
+|
+MovieGridComponent displays the current page
+```
+
+## Pagination
+
+Pagination is handled in `MoviesPageComponent` using signal state and computed values.
+
+Inspect: `src/app/pages/movies/movies-page.ts`
+
+Example:
+
+```ts
+protected readonly visibleMovies = computed(() => {
+  const startIndex = (this.currentPage() - 1) * this.pageSize;
+  return this.filteredMovies().slice(startIndex, startIndex + this.pageSize);
+});
+```
+
+# Mentor Requirement - Configurable Content Blocks
+
+The requirement is implemented with:
+
+- `src/app/models/display-config.ts`
+- `src/app/services/display-config.service.ts`
+- `src/app/pages/settings/settings-page.html`
+- `src/app/pages/home/home-page.html`
+
+The Settings page changes persisted configuration. The Home page uses `@if` to render or skip each block.
+
+Example from `src/app/pages/home/home-page.html`:
+
+```html
+@if (displayConfigService.displayConfig().featuredMovies) {
+  <app-movie-grid title="Featured Movies" [movies]="featuredMovies" />
+}
+```
+
+This is conditional rendering, not CSS hiding.
+
+# Tests
+
+Important logic is covered in:
+
+- `src/app/services/movie.service.spec.ts`: retrieval, search, genre filtering, sorting
+- `src/app/services/favorites.service.spec.ts`: favorite toggling and persistence
+- `src/app/services/display-config.service.spec.ts`: display settings and reset
+- `src/app/pages/movies/movies-page.spec.ts`: pagination and filter reset
+- `src/app/app.spec.ts`: shell rendering
