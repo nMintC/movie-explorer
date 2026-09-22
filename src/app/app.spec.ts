@@ -1,34 +1,27 @@
 ﻿import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { AppComponent } from './app';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
+      providers: [provideHttpClient()],
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it('should create the application shell', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it('should render the app title', async () => {
+  it('should render the navbar and router outlet', async () => {
     const fixture = TestBed.createComponent(AppComponent);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Movie Explorer');
-  });
 
-  it('should filter movies by title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-
-    app.updateSearchText('inception');
-    app.searchMovies();
-
-    expect(app.filteredMovies.length).toBe(1);
-    expect(app.filteredMovies[0].title).toBe('Inception');
+    expect(compiled.querySelector('app-navbar')).toBeTruthy();
+    expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
 });
