@@ -654,3 +654,73 @@ Additional tests cover the new architecture:
 - `src/app/guards/valid-movie-id.guard.spec.ts`: valid and invalid route parameters
 - `src/app/interceptors/movie-api.interceptor.spec.ts`: shared HTTP header
 - `src/app/services/movie.service.spec.ts`: static JSON loading and fallback behavior
+
+# Frontend Design - Visual Foundation
+
+This iteration adds a small CSS design system without changing Angular behavior. The shared tokens live in src/styles.css and are available to every component stylesheet.
+
+## Design Tokens
+
+Design tokens are named values for decisions that repeat across an interface. Semantic names make the role clear and make future visual changes safer than scattering unrelated hex values through components.
+
+Examples from this project:
+
+    --color-bg: #080a0f;
+    --color-surface: #10151f;
+    --color-text-primary: #f4f1ea;
+    --color-accent: #d7a85f;
+    --space-4: 16px;
+    --radius-md: 8px;
+
+Semantic color tokens explain intent. --color-text-secondary is easier to maintain than many slightly different gray values. The palette is intentionally restrained so the interface feels like a quiet cinematic library rather than a dashboard.
+
+## Spacing And Rhythm
+
+The project uses a small spacing scale:
+
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 64px;
+
+A scale creates a consistent visual rhythm between page sections, panels, controls, and card content. It is a guide, not a rule that every layout-specific number must be removed.
+
+## Typography Hierarchy
+
+Typography now uses a small hierarchy built from the same font family and a few weights:
+
+- 400 for normal body text
+- 500 for labels and metadata
+- 600 for card and section titles
+- 700 for major page headings
+
+Fewer weights usually create clearer hierarchy than making every piece of text heavy. Shared line-height tokens also make paragraphs and headings easier to scan.
+
+## Surfaces, Borders, And Interaction
+
+Panels and cards use --color-surface, --color-surface-raised, and --color-border to create depth through contrast. This is quieter and more predictable than adding a strong shadow to every card.
+
+The project keeps only a subtle shadow token and uses one shared focus treatment:
+
+    --focus-outline: 2px solid var(--color-accent);
+
+Hover, focus-visible, selected, and disabled states now use the same accent and surface roles. Focus remains visible for keyboard users without bright teal outlines appearing everywhere.
+
+## Angular Architecture Versus CSS Design
+
+Angular and CSS solve different problems:
+
+| Project concern | Main concept | Example |
+| --- | --- | --- |
+| Reusable UI behavior | Angular component | MovieCardComponent |
+| Shared application state | Angular service and signals | FavoritesService |
+| Conditional rendering | Angular template control flow | @if in Home |
+| Visual values reused across CSS | CSS custom properties | --color-surface |
+| Responsive layout | CSS media queries and grid | .movie-grid |
+| Keyboard focus appearance | CSS pseudo-class | :focus-visible |
+
+The Angular architecture controls data flow, routing, state, and rendering. CSS custom properties are browser-level styling tools used by those components. Keeping those responsibilities separate makes both the learning path and future redesigns easier to understand.
