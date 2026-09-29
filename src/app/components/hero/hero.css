@@ -2,12 +2,12 @@
   min-height: 320px;
   display: flex;
   align-items: center;
-  padding: 40px;
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  border-radius: 8px;
+  padding: var(--space-7);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   background:
-    linear-gradient(90deg, rgba(8, 13, 26, 0.95), rgba(8, 13, 26, 0.62)),
-    url("https://placehold.co/1600x600/111827/f8fafc?text=Movie+Explorer") center / cover;
+    linear-gradient(90deg, rgba(8, 10, 15, 0.96), rgba(8, 10, 15, 0.62)),
+    url("https://placehold.co/1600x600/111827/f4f1ea?text=Movie+Explorer") center / cover;
 }
 
 .hero-content {
@@ -15,37 +15,41 @@
 }
 
 .eyebrow {
-  margin: 0 0 10px;
-  color: #2dd4bf;
-  font-weight: 900;
+  margin: 0 0 var(--space-3);
+  color: var(--color-accent);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .hero h1 {
   margin: 0;
   font-size: clamp(2.6rem, 7vw, 5rem);
+  font-weight: var(--font-weight-bold);
   line-height: 1;
 }
 
 .intro {
   max-width: 58ch;
-  margin: 16px 0 24px;
-  color: #dbeafe;
+  margin: var(--space-4) 0 var(--space-5);
+  color: var(--color-text-secondary);
   font-size: 1.08rem;
-  line-height: 1.6;
+  line-height: var(--line-height-body);
 }
 
 .hero-link {
   display: inline-flex;
-  border-radius: 6px;
-  padding: 12px 16px;
-  color: #08111f;
-  background: #2dd4bf;
-  font-weight: 900;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-bg);
+  background: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
   text-decoration: none;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
 }
 
-.hero-link:focus-visible {
-  outline: 3px solid rgba(45, 212, 191, 0.42);
-  outline-offset: 3px;
+.hero-link:hover {
+  border-color: var(--color-accent-hover);
+  background: var(--color-accent-hover);
 }

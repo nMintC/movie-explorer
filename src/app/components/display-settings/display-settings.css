@@ -1,45 +1,47 @@
 ﻿.settings-panel {
   display: grid;
-  gap: 14px;
+  gap: var(--space-4);
   max-width: 620px;
-  padding: 22px;
-  border: 1px solid rgba(148, 163, 184, 0.24);
-  border-radius: 8px;
-  background: rgba(15, 23, 42, 0.78);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
 }
 
 h2 {
-  margin: 0 0 6px;
+  margin: 0 0 var(--space-1);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
 }
 
 label {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-weight: 800;
+  gap: var(--space-3);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
 }
 
 input {
   width: 20px;
   height: 20px;
-  accent-color: #2dd4bf;
+  accent-color: var(--color-accent);
 }
 
 button {
   justify-self: start;
   min-height: 42px;
-  border: 0;
-  border-radius: 6px;
-  padding: 0 14px;
-  color: #08111f;
-  background: #2dd4bf;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-4);
+  color: var(--color-bg);
+  background: var(--color-accent);
   cursor: pointer;
-  font: inherit;
-  font-weight: 900;
+  font-weight: var(--font-weight-semibold);
+  transition: background var(--transition-fast), border-color var(--transition-fast);
 }
 
-button:focus-visible,
-input:focus-visible {
-  outline: 3px solid rgba(45, 212, 191, 0.36);
-  outline-offset: 3px;
+button:hover:not(:disabled) {
+  border-color: var(--color-accent-hover);
+  background: var(--color-accent-hover);
 }
